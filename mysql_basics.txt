@@ -1,0 +1,51 @@
+-> Database Creation
+    CREATE DATABASE testDB;
+
+-> Database Deletion
+    DROP DATABASE testDB;
+
+-> Table Creation
+    CREATE TABLE Customers (
+    PersonID int,
+    CustomerName varchar(255),
+    ContactName varchar(255),
+    Address varchar(255),
+    City varchar(255)
+    PostalCode varchar(10)
+    Country varchar(255)
+    );
+
+-> Insert Values
+    INSERT INTO Customers VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
+
+-> Drop Table
+    DROP TABLE Persons;
+
+-> Delete all the rows
+    TRUNCATE TABLE Persons;
+
+-> To add, delete or modify columns, constraints
+    ALTER TABLE Customers ADD DateOfBirth date;;
+    ALTER TABLE Customers DROP COLUMN DateOfBirth;
+    ALTER TABLE Customers MODIFY COLUMN DateOfBirth year;
+    ALTER TABLE Customers MODIFY DateOfBirth int NOT NULL;
+
+-> Select Statement
+    SELECT * FROM Customers;
+
+    SELECT DISTINCT Country FROM Customers;
+
+    SELECT * FROM Customers WHERE Country = 'Mexico';
+    SELECT * FROM Customers WHERE Country <> 'Mexico';
+
+    SELECT * FROM Customers WHERE Country = 'Germany' AND City = 'Berlin';
+
+    SELECT * FROM Customers WHERE City = 'Berlin' OR City = 'Stuttgart';
+
+    SELECT * FROM Customers WHERE NOT Country = 'Germany'
+
+-> Order By
+    SELECT * FROM Customers ORDER BY Country;
+    SELECT * FROM Customers ORDER BY Country DESC;
+    
+    
