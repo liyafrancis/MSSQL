@@ -1,0 +1,70 @@
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Email VARCHAR(100) UNIQUE,
+    Phone VARCHAR(15)
+);
+
+CREATE TABLE Accounts (
+    AccountID INT PRIMARY KEY,
+    CustomerID INT,
+    AccountType VARCHAR(20), 
+    Balance DECIMAL(10,2) DEFAULT 0.00,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY,
+    AccountID INT,
+    TransactionType VARCHAR(10),  
+    Amount DECIMAL(10,2),
+    TransactionDate DATE,
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+
+INSERT INTO Customers VALUES (1, 'Ravi', 'ravi@example.com', '9876543210');
+INSERT INTO Customers VALUES (2, 'Sita', 'sita@example.com', '8765432109');
+
+INSERT INTO Accounts VALUES (101, 1, 'Savings', 5000.00);
+INSERT INTO Accounts VALUES (102, 1, 'Current', 10000.00);
+INSERT INTO Accounts VALUES (103, 2, 'Savings', 8000.00);
+
+INSERT INTO Transactions VALUES (1001, 101, 'Credit', 1000.00, '2025-07-01');
+INSERT INTO Transactions VALUES (1004, 101, 'Credit', 1000.00, '2024-12-01');
+INSERT INTO Transactions VALUES (1002, 101, 'Debit', 500.00, '2025-01-02');
+INSERT INTO Transactions VALUES (1003, 103, 'Credit', 2000.00, '2024-07-03');
+INSERT INTO Transactions VALUES (1005, 103, 'Debit', 2000.00, '2025-07-03');
+
+a) List all accounts with customer name:
+ SELECT A.AccountID, C.Name, A.AccountType, A.Balance
+FROM Accounts A
+JOIN Customers C ON A.CustomerID = C.CustomerID;
+ 
+b) Show all transactions with account type and customer name:
+ SELECT T.TransactionID, C.Name, A.AccountType, T.TransactionType, T.Amount, T.TransactionDate
+FROM Transactions T
+JOIN Accounts A ON T.AccountID = A.AccountID
+JOIN Customers C ON A.CustomerID = C.CustomerID;
+
+c) Total balance per customer:
+ SELECT C.Name, SUM(A.Balance) AS TotalBalance
+FROM Customers C
+JOIN Accounts A ON C.CustomerID = A.CustomerID
+GROUP BY C.Name;
+
+UPDATE Accounts
+SET Balance = Balance + 2000
+WHERE AccountID = 101;
+
+1. Write a query to get customers who have more than one account.
+select name,CustomerID from customers where CustomerID in (select CustomerID from Accounts group by CustomerID having count(*)>1);
+
+2. Write a query to show total credited and debited amount per account.
+select AccountID,TransactionType,sum(amount) from Transactions group by AccountID, TransactionType;
+
+3. Add a new column BranchName to the Accounts table.
+alter table Accounts add BranchName Varchar(255);
+
+4. Delete all transactions older than 6 months.
+delete from Transactions where TransactionDate<dateadd(month,-6,getdate());
+
